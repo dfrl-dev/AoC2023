@@ -1,5 +1,4 @@
 import os
-import re
 
 data_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
 
@@ -13,7 +12,6 @@ with open(data_file_path) as f:
                 current += char
         
         input.append(int(current))
-
 
 for i in range(0, int(len(input)/2)):
     pairIdx = int(len(input)/2 + i)
