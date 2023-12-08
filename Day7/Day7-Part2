@@ -3,14 +3,6 @@ from collections import Counter
 
 data_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
 
-def isGreater(first, next):
-    if cardValues[first] > cardValues[next]:
-        return 1
-    if cardValues[first] == cardValues[next]:
-        return 0
-    if cardValues[first] < cardValues[next]:
-        return -1
-
 fullInput = []
 with open(data_file_path) as f:
     for line in f.readlines():
@@ -43,13 +35,15 @@ for line in fullInput:
     jokers = frequencies.get('J')
     if jokers == None:
         jokers = 0
+
+    #get repeats of all other cards
     exclusion = 'J'
     repeats = list([c for (w, c) in frequencies.most_common() if w not in exclusion])
 
     if(jokers == 5):
         repeats.append(5)
     else:
-        repeats[0] += jokers
+        repeats[0] += jokers  #wildcard can always be added to the most valuable repeated card to ensure best hand
 
     if repeats[0] == 5:
         rank = 6
@@ -65,31 +59,6 @@ for line in fullInput:
         rank = 1
     else:
         rank = 0
-    
-    
-    # rankNoWild = 0
-    # for val in repeats:
-    #     if(val[1]) == 5:
-    #         rankNoWild += 6
-    #         break
-    #     if(val[1]) == 4:
-    #         rankNoWild +=5
-    #         break
-    #     if(val[1]) == 3:
-    #         rankNoWild += 3
-    #     if(val[1]) == 2:
-    #         rankNoWild += 1
-    
-    # rank = 0
-
-    # if rankNoWild == 0 and jokers == 1:
-    #     rank = 1
-    # elif rankNoWild == 0 and jokers == 2:
-    #     rank = 3
-    # elif rankNoWild == 0 and jokers == 3:
-    #     rank = 5
-    # else:
-    #     rank = min(6, rankNoWild + (2*jokers))
 
     handTypes[rank].append(line)
 
