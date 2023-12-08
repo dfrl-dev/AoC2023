@@ -1,0 +1,87 @@
+import os
+from collections import Counter
+
+data_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
+
+def isGreater(first, next):
+    if cardValues[first] > cardValues[next]:
+        return 1
+    if cardValues[first] == cardValues[next]:
+        return 0
+    if cardValues[first] < cardValues[next]:
+        return -1
+
+fullInput = []
+with open(data_file_path) as f:
+    for line in f.readlines():
+        fullInput.append(line.strip('\n'))
+
+cardValues = {
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    'T': 10,
+    'J': 1,
+    'Q': 12,
+    'K': 13,
+    'A': 15
+}
+
+#lowest (high card), to highest (5 of a kind)
+handTypes = [[],[],[],[],[],[],[]]
+
+
+for line in fullInput:
+    hand = line.split(' ')[0]
+    frequencies = Counter(hand)
+
+    jokers = frequencies.get('J')
+    if jokers == None:
+        jokers = 0
+    exclusion = 'J'
+    repeats = [(w, c) for (w, c) in frequencies.most_common() if w not in exclusion]
+    
+    rankNoWild = 0
+    for val in repeats:
+        if(val[1]) == 5:
+            rankNoWild += 6
+            break
+        if(val[1]) == 4:
+            rankNoWild +=5
+            break
+        if(val[1]) == 3:
+            rankNoWild += 3
+        if(val[1]) == 2:
+            rankNoWild += 1
+    
+    rank = 0
+
+    if rankNoWild == 0 and jokers == 1:
+        rank = 1
+    elif rankNoWild == 0 and jokers == 2:
+        rank = 3
+    elif rankNoWild == 0 and jokers == 3:
+        rank = 5
+    else:
+        rank = min(6, rankNoWild + (2*jokers))
+
+    handTypes[rank].append(line)
+
+#sort based on dictionary
+for j, type in enumerate(handTypes):
+    type.sort(key=lambda x: [cardValues.get(c) for c in x])
+
+totalWinnings = 0
+rank = 1
+for combination in handTypes:
+    for hand in combination:
+        handValue = int(hand.split(' ')[1])
+        totalWinnings += handValue * rank
+        rank+=1
+
+print(totalWinnings)
