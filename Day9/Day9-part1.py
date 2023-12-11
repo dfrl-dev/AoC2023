@@ -1,6 +1,6 @@
 import os
 
-data_file_path = os.path.join(os.path.dirname(__file__), "input.txt")
+data_file_path = os.path.join(os.path.dirname(__file__), "tinput.txt")
 
 fullInput = []
 with open(data_file_path) as f:
